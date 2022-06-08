@@ -18,7 +18,7 @@ import androidx.core.view.ViewCompat;
 import androidx.customview.widget.ViewDragHelper;
 
 @SuppressLint("RtlHardcoded")
-public class SwipeRevealLayout extends ViewGroup {
+public class SwipeLayout extends ViewGroup {
     public static final int DRAG_EDGE_LEFT = 0x1;
     public static final int DRAG_EDGE_RIGHT = 0x1 << 1;
     public static final int DRAG_EDGE_TOP = 0x1 << 2;
@@ -81,7 +81,7 @@ public class SwipeRevealLayout extends ViewGroup {
     private int mLastMainLeft = 0;
     private int mLastMainTop = 0;
 
-    private int mDragEdge = DRAG_EDGE_LEFT;
+    private int mDragEdge = DRAG_EDGE_RIGHT;
     private final GestureDetector.OnGestureListener mGestureListener = new GestureDetector.SimpleOnGestureListener() {
         boolean hasDisallowed = false;
 
@@ -289,17 +289,17 @@ public class SwipeRevealLayout extends ViewGroup {
             boolean isMoved = (mMainView.getLeft() != mLastMainLeft) || (mMainView.getTop() != mLastMainTop);
             if (mSwipeListener != null && isMoved) {
                 if (mMainView.getLeft() == mRectMainClose.left && mMainView.getTop() == mRectMainClose.top) {
-                    mSwipeListener.onClosed(SwipeRevealLayout.this);
+                    mSwipeListener.onClosed(SwipeLayout.this);
                 } else if (mMainView.getLeft() == mRectMainOpen.left && mMainView.getTop() == mRectMainOpen.top) {
-                    mSwipeListener.onOpened(SwipeRevealLayout.this);
+                    mSwipeListener.onOpened(SwipeLayout.this);
                 } else {
-                    mSwipeListener.onSlide(SwipeRevealLayout.this, getSlideOffset());
+                    mSwipeListener.onSlide(SwipeLayout.this, getSlideOffset());
                 }
             }
 
             mLastMainLeft = mMainView.getLeft();
             mLastMainTop = mMainView.getTop();
-            ViewCompat.postInvalidateOnAnimation(SwipeRevealLayout.this);
+            ViewCompat.postInvalidateOnAnimation(SwipeLayout.this);
         }
 
         private float getSlideOffset() {
@@ -360,17 +360,27 @@ public class SwipeRevealLayout extends ViewGroup {
     };
     private int mOnLayoutCount = 0;
 
-    public SwipeRevealLayout(Context context) {
+    public SwipeLayout(Context context) {
         super(context);
+    }
+
+    public SwipeLayout(Context context, MenuDirections menuDirections) {
+        super(context);
+
+        if (menuDirections == MenuDirections.RIGHT) {
+            mDragEdge = DRAG_EDGE_RIGHT;
+        } else {
+            mDragEdge = DRAG_EDGE_LEFT;
+        }
         init(context, null);
     }
 
-    public SwipeRevealLayout(Context context, AttributeSet attrs) {
+    public SwipeLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public SwipeRevealLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SwipeLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -679,7 +689,7 @@ public class SwipeRevealLayout extends ViewGroup {
             );
         }
 
-        ViewCompat.postInvalidateOnAnimation(SwipeRevealLayout.this);
+        ViewCompat.postInvalidateOnAnimation(SwipeLayout.this);
     }
 
     /**
@@ -719,7 +729,7 @@ public class SwipeRevealLayout extends ViewGroup {
             );
         }
 
-        ViewCompat.postInvalidateOnAnimation(SwipeRevealLayout.this);
+        ViewCompat.postInvalidateOnAnimation(SwipeLayout.this);
     }
 
     /**
@@ -802,15 +812,12 @@ public class SwipeRevealLayout extends ViewGroup {
         return (mState == STATE_CLOSE);
     }
 
-    /**
-     * Only used for {@link ViewBinderHelper}
-     */
     void setDragStateChangeListener(DragStateChangeListener listener) {
         mDragStateChangeListener = listener;
     }
 
     /**
-     * Abort current motion in progress. Only used for {@link ViewBinderHelper}
+     * Abort current motion in progress
      */
     protected void abort() {
         mAborted = true;
@@ -966,7 +973,7 @@ public class SwipeRevealLayout extends ViewGroup {
     }
 
     private void init(Context context, AttributeSet attrs) {
-        mDragEdge = DRAG_EDGE_RIGHT;
+
         mMode = MODE_SAME_LEVEL;
         mMinDistRequestDisallowParent = dpToPx(DEFAULT_MIN_DIST_REQUEST_DISALLOW_PARENT);
 
@@ -1071,19 +1078,19 @@ public class SwipeRevealLayout extends ViewGroup {
         /**
          * Called when the main view becomes completely closed.
          */
-        void onClosed(SwipeRevealLayout view);
+        void onClosed(SwipeLayout view);
 
         /**
          * Called when the main view becomes completely opened.
          */
-        void onOpened(SwipeRevealLayout view);
+        void onOpened(SwipeLayout view);
 
         /**
          * Called when the main view's position changes.
          *
          * @param slideOffset The new offset of the main view within its range, from 0-1
          */
-        void onSlide(SwipeRevealLayout view, float slideOffset);
+        void onSlide(SwipeLayout view, float slideOffset);
     }
 
     /**
@@ -1092,15 +1099,15 @@ public class SwipeRevealLayout extends ViewGroup {
      */
     public static class SimpleSwipeListener implements SwipeListener {
         @Override
-        public void onClosed(SwipeRevealLayout view) {
+        public void onClosed(SwipeLayout view) {
         }
 
         @Override
-        public void onOpened(SwipeRevealLayout view) {
+        public void onOpened(SwipeLayout view) {
         }
 
         @Override
-        public void onSlide(SwipeRevealLayout view, float slideOffset) {
+        public void onSlide(SwipeLayout view, float slideOffset) {
         }
     }
 }
