@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.graphics.PixelFormat;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,10 +35,10 @@ public class SideMenu {
     MenuDirections menuDirections;
     ScrollView contentContainer;
     FrameLayout indicatorContainer;
-    FrameLayout indicatorContainer2;
+    FrameLayout indicatorInternal;
     WindowManager.LayoutParams windowParams;
     int threshold = 0;
-    View menuindicator;
+    FrameLayout menuindicatorContiner;
     SwipeLayout rootLayout;
     WindowManager windowManager;
 
@@ -53,12 +54,12 @@ public class SideMenu {
         try {
             windowManager.removeView(rootLayout);
         } catch (Exception exception) {
-
+            Log.d(TAG, "close: " + exception.getMessage());
         }
         try {
             windowManager.removeView(indicatorContainer);
         } catch (Exception exception) {
-
+            Log.d(TAG, "close: " + exception.getMessage());
         }
     }
 
@@ -89,14 +90,14 @@ public class SideMenu {
         rootLayout = new SwipeLayout(parentActivity.getBaseContext(), menuDirections);
         if (menuDirections == MenuDirections.RIGHT) {
             rootLayout.addView(contentContainer);
-            rootLayout.addView(indicatorContainer2);
+            rootLayout.addView(indicatorInternal);
             windowParams.gravity = Gravity.RIGHT;
-            threshold = threshold - dpToPx(60);
+            threshold = threshold - dpToPx(56);
         } else {
             rootLayout.addView(contentContainer);
-            rootLayout.addView(indicatorContainer2);
+            rootLayout.addView(indicatorInternal);
             windowParams.gravity = Gravity.LEFT;
-            threshold = dpToPx(60);
+            threshold = dpToPx(56);
         }
 
         rootLayout.setOnTouchListener(new View.OnTouchListener() {
@@ -208,7 +209,7 @@ public class SideMenu {
             }
         };
 
-        menuindicator.setOnTouchListener(touchListener);
+        menuindicatorContiner.setOnTouchListener(touchListener);
         rootLayout.onFinishInflate();
         windowManager.addView(indicatorContainer, windowParams);
 
@@ -266,48 +267,50 @@ public class SideMenu {
         FrameLayout.LayoutParams params2 = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.MATCH_PARENT);
         indicatorContainer.setLayoutParams(params2);
 
-        menuindicator = new View(parentActivity);
+        menuindicatorContiner = new FrameLayout(parentActivity);
+        View menuindicator = new View(parentActivity);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(dpToPx(8), dpToPx(100), Gravity.BOTTOM);
         int left = 0, right = 0;
         if (menuDirections == MenuDirections.RIGHT) {
-            left = dpToPx(16);
+            left = dpToPx(24);
 
         } else {
-            right = dpToPx(16);
+            right = dpToPx(24);
         }
-        params2.setMargins(left, dpToPx(200), right, dpToPx(16));
+        params2.setMargins(left, dpToPx(50), right, dpToPx(50));
 
-
-        params.setMargins(left, dpToPx(200), right, dpToPx(16));
+        params.setMargins(left, dpToPx(50), right, dpToPx(50));
         menuindicator.setLayoutParams(params);
         menuindicator.setBackgroundResource(R.drawable.bg_indicators);
 
-        indicatorContainer.addView(menuindicator);
+        menuindicatorContiner.addView(menuindicator);
+        indicatorContainer.addView(menuindicatorContiner);
     }
+
 
     private void setupIndicator2() {
 
-        indicatorContainer2 = new FrameLayout(parentActivity);
+        indicatorInternal = new FrameLayout(parentActivity);
         FrameLayout.LayoutParams params2 = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.MATCH_PARENT);
-        indicatorContainer2.setLayoutParams(params2);
+        indicatorInternal.setLayoutParams(params2);
 
         View menuindicator = new View(parentActivity);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(dpToPx(8), dpToPx(100), Gravity.BOTTOM);
         int left = 0, right = 0;
         if (menuDirections == MenuDirections.RIGHT) {
-            left = dpToPx(16);
+            left = dpToPx(24);
 
         } else {
-            right = dpToPx(16);
+            right = dpToPx(24);
         }
-        params2.setMargins(left, dpToPx(200), right, dpToPx(16));
+        params2.setMargins(left, dpToPx(50), right, dpToPx(50));
 
 
-        params.setMargins(left, dpToPx(200), right, dpToPx(16));
+        params.setMargins(left, dpToPx(50), right, dpToPx(50));
         menuindicator.setLayoutParams(params);
         menuindicator.setBackgroundResource(R.drawable.bg_indicators);
 
-        indicatorContainer2.addView(menuindicator);
+        indicatorInternal.addView(menuindicator);
     }
 
 
