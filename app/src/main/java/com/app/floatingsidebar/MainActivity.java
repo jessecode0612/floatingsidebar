@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.WindowManager;
 
 import androidx.annotation.RequiresApi;
@@ -17,7 +19,9 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 5469;
     ArrayList<MenuItem> mList = new ArrayList<>();
-    boolean show = true;
+
+    SideMenu sideMenu;
+    private GestureDetector mDetector;
 
     @SuppressLint("CommitPrefEdits")
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -30,6 +34,48 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         fillMenuList();
         showWindowManager();
+
+
+        mDetector = new GestureDetector(this, new GestureDetector.OnGestureListener() {
+            @Override
+            public boolean onDown(MotionEvent motionEvent) {
+                return false;
+            }
+
+            @Override
+            public void onShowPress(MotionEvent motionEvent) {
+
+            }
+
+            @Override
+            public boolean onSingleTapUp(MotionEvent motionEvent) {
+                return false;
+            }
+
+            @Override
+            public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+                if (v == 0 && Math.abs(v1) > 1) {
+
+                    if (sideMenu != null) {
+                        sideMenu.close();
+                    }
+
+                }
+                return true;
+            }
+
+            @Override
+            public void onLongPress(MotionEvent motionEvent) {
+
+            }
+
+            @Override
+            public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+                return false;
+            }
+        });
+
+
     }
 
     @SuppressLint("LongLogTag")
@@ -44,6 +90,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        mDetector.onTouchEvent(event);
+        return super.onTouchEvent(event);
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @SuppressLint({"ResourceAsColor", "SetTextI18n", "ClickableViewAccessibility", "WrongConstant"})
     public void showWindowManager() {
@@ -52,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //For Directions MenuDirections.LEFT || MenuDirections.RIGHT
-        new SideMenu(this, mList, MenuDirections.LEFT);
+        sideMenu = new SideMenu(this, mList, MenuDirections.LEFT);
 
 
     }

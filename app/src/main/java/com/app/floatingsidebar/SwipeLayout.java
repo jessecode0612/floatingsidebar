@@ -38,7 +38,7 @@ public class SwipeLayout extends ViewGroup {
     protected static final int STATE_OPENING = 3;
     protected static final int STATE_DRAGGING = 4;
     private static final int DEFAULT_MIN_FLING_VELOCITY = 300; // dp per second
-    private static final int DEFAULT_MIN_DIST_REQUEST_DISALLOW_PARENT = 1; // dp
+    private static final int DEFAULT_MIN_DIST_REQUEST_DISALLOW_PARENT = 32; // dp
     /**
      * The rectangle position of the main view when the layout is closed.
      */
@@ -415,6 +415,11 @@ public class SwipeLayout extends ViewGroup {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
+        if (!mIsOpenBeforeInit) {
+            super.onInterceptTouchEvent(ev);
+            return false;
+
+        }
         if (isDragLocked()) {
             return super.onInterceptTouchEvent(ev);
         }
