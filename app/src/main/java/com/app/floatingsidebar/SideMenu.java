@@ -228,6 +228,8 @@ public class SideMenu {
                 displayMetrics.widthPixels / 3,
                 displayMetrics.heightPixels
         ));
+        contentContainer.setFillViewport(true);
+
         contentContainer.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 contentContainer.post(() -> contentContainer.fullScroll(View.FOCUS_DOWN));
@@ -235,12 +237,20 @@ public class SideMenu {
             return false;
         });
 
+        FrameLayout mContainer = new FrameLayout(parentActivity.getBaseContext());
+        mContainer.setLayoutParams(new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT
+        ));
+
         LinearLayout menuContainer = new LinearLayout(parentActivity.getBaseContext());
 
         menuContainer.setOrientation(LinearLayout.VERTICAL);
+
         menuContainer.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT
+                LinearLayout.LayoutParams.WRAP_CONTENT
+
         ));
 
 
@@ -251,12 +261,16 @@ public class SideMenu {
             container.setOnClickListener(view -> {
                 Toast.makeText(parentActivity.getBaseContext(), mList.get(finalI).title + " Clicked!", Toast.LENGTH_SHORT).show();
             });
-
             menuContainer.addView(container);
 
         }
-        contentContainer.setBackgroundResource(R.drawable.bg_menu);
-        contentContainer.addView(menuContainer);
+        menuContainer.setBackgroundResource(R.drawable.bg_menu);
+
+
+        mContainer.addView(menuContainer, new FrameLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT, Gravity.CENTER));
+
+        contentContainer.addView(mContainer);
 
 
     }
@@ -264,12 +278,9 @@ public class SideMenu {
     private void setupIndicator() {
 
         indicatorContainer = new FrameLayout(parentActivity);
-        FrameLayout.LayoutParams params2 = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.MATCH_PARENT);
-        indicatorContainer.setLayoutParams(params2);
+        indicatorContainer.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.MATCH_PARENT, Gravity.BOTTOM));
 
-        menuindicatorContiner = new FrameLayout(parentActivity);
-        View menuindicator = new View(parentActivity);
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(dpToPx(8), dpToPx(100), Gravity.BOTTOM);
+
         int left = 0, right = 0;
         if (menuDirections == MenuDirections.RIGHT) {
             left = dpToPx(24);
@@ -277,22 +288,30 @@ public class SideMenu {
         } else {
             right = dpToPx(24);
         }
-        params2.setMargins(left, dpToPx(50), right, dpToPx(50));
 
-        params.setMargins(left, dpToPx(50), right, dpToPx(50));
-        menuindicator.setLayoutParams(params);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(dpToPx(8), dpToPx(100));
+        params.setMargins(left, dpToPx(32), right, dpToPx(32));
+
+        View menuindicator = new View(parentActivity);
         menuindicator.setBackgroundResource(R.drawable.bg_indicators);
 
-        menuindicatorContiner.addView(menuindicator);
-        indicatorContainer.addView(menuindicatorContiner);
+
+        FrameLayout.LayoutParams pp = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, WRAP_CONTENT, Gravity.BOTTOM);
+        pp.setMargins(0, 0, 0, dpToPx(200) - dpToPx(32));
+
+        menuindicatorContiner = new FrameLayout(parentActivity);
+        menuindicatorContiner.addView(menuindicator, params);
+
+        indicatorContainer.addView(menuindicatorContiner, pp);
     }
 
 
     private void setupIndicator2() {
 
+
         indicatorInternal = new FrameLayout(parentActivity);
-        FrameLayout.LayoutParams params2 = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.MATCH_PARENT);
-        indicatorInternal.setLayoutParams(params2);
+        indicatorInternal.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.MATCH_PARENT, Gravity.BOTTOM));
+
 
         View menuindicator = new View(parentActivity);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(dpToPx(8), dpToPx(100), Gravity.BOTTOM);
@@ -303,14 +322,21 @@ public class SideMenu {
         } else {
             right = dpToPx(24);
         }
-        params2.setMargins(left, dpToPx(50), right, dpToPx(50));
 
 
-        params.setMargins(left, dpToPx(50), right, dpToPx(50));
+        params.setMargins(left, dpToPx(32), right, dpToPx(32));
+
         menuindicator.setLayoutParams(params);
         menuindicator.setBackgroundResource(R.drawable.bg_indicators);
 
-        indicatorInternal.addView(menuindicator);
+
+        FrameLayout.LayoutParams pp = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, WRAP_CONTENT, Gravity.BOTTOM);
+        pp.setMargins(0, 0, 0, dpToPx(200) - dpToPx(32));
+
+        FrameLayout menuindicatorContiner = new FrameLayout(parentActivity);
+        menuindicatorContiner.addView(menuindicator, params);
+
+        indicatorInternal.addView(menuindicatorContiner, pp);
     }
 
 

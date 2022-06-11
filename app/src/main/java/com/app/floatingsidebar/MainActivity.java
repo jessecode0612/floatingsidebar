@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("LongLogTag")
     private void fillMenuList() {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 2; i++) {
             mList.add(new MenuItem(i,
                     "Item " + i,
                     "https://www.clipartmax.com/png/full/4-41237_free-icons-png-new-home-icon.png"
