@@ -367,7 +367,7 @@ public class SideMenu {
 
 
         View menuindicator = new View(parentActivity);
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(dpToPx(8), dpToPx(100), Gravity.BOTTOM);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(dpToPx(8), dpToPx(100));
         int left = 0, right = 0;
         if (menuDirections == MenuDirections.RIGHT) {
             left = dpToPx(24);
