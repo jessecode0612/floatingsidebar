@@ -238,8 +238,8 @@ public class SideMenu {
 
         FrameLayout mContainer = new FrameLayout(parentActivity.getBaseContext());
         mContainer.setLayoutParams(new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.WRAP_CONTENT,
-                FrameLayout.LayoutParams.MATCH_PARENT
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT
         ));
 
         LinearLayout menuContainer = new LinearLayout(parentActivity.getBaseContext());
